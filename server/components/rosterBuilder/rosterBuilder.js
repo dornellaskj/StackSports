@@ -24,7 +24,7 @@ function generateNames() {
     names.push(name);
     generateNames();
   } else if (names.length <= MAX_PLAYERS) {
-    enerateNames();
+    generateNames();
   }
 }
 
