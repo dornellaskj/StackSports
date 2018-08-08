@@ -1,0 +1,15 @@
+@import './mixins';
+@import './common';
+
+.roster-table {
+  background-color: #fff;
+  margin: 24px auto;
+  td {
+    border: 1px solid #000;
+    padding: 4px;
+  }
+}
+.team-label {
+  display: block;
+  text-align: center;
+}

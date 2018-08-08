@@ -1,0 +1,65 @@
+{
+  "name": "stacksports",
+  "version": "0.1.0",
+  "description": "Kevin Dornellas stacksports",
+  "main": "server/bin/server.js",
+  "scripts": {
+    "build": "npm run build:client && npm run build:server",
+    "build:server": "cross-env NODE_ENV=production webpack --config webpack/server.prod.js --progress",
+    "build:client": "cross-env NODE_ENV=production webpack --config webpack/client.prod.js --progress",
+    "start": "cd server && node bin/server.js",
+    "lint": "eslint --ext .jsx,.js ./",
+    "test": "./node_modules/.bin/mocha \"./server/**/*.test.js\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dornellaskj/"
+  },
+  "keywords": [
+    "express",
+    "webpack",
+    "babel",
+    "expressjs"
+  ],
+  "author": "Kevin Dornellas",
+  "license": "MIT",
+  "homepage": "https://github.com/dornellaskj/",
+  "dependencies": {
+    "cross-env": "^5.1.6",
+    "express": "^4.16.3",
+    "prop-types": "^15.6.1"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.4",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-react": "^6.11.1",
+    "babel-preset-stage-1": "^6.5.0",
+    "chai": "^4.1.2",
+    "css-loader": "^0.28.11",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.12.0",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-react": "^7.8.2",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "file-loader": "^1.1.11",
+    "html-webpack-plugin": "^2.30.1",
+    "mocha": "^5.2.0",
+    "node-sass": "^4.9.0",
+    "sass-loader": "^6.0.7",
+    "sinon": "^6.1.4",
+    "sinon-chai": "^3.2.0",
+    "style-loader": "^0.18.2",
+    "uglifyjs-webpack-plugin": "^0.4.6",
+    "webpack": "^3.12.0",
+    "webpack-dev-server": "^2.11.2",
+    "webpack-node-externals": "^1.7.2"
+  },
+  "bundledDependencies": [
+    "cross-env",
+    "ejs",
+    "express",
+    "prop-types"
+  ]
+}
