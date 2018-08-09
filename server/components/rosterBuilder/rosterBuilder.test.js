@@ -1,10 +1,10 @@
 const chai = require('chai');
 const expect = chai.expect;
-const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 chai.use(sinonChai);
 const rosterBuilder = require('./rosterBuilder');
 let roster;
+
 describe('Tests for HomePage', function() {
   it('Should return an HTML string', done => {
     rosterBuilder.rosterBuilder.then( resp=> {

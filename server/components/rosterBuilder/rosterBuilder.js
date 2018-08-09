@@ -1,66 +1,70 @@
-const MAX_POINTS = 175;
 const MAX_PLAYERS = 15;
 const MAX_STARTERS = 10;
-let roster = [], htmlResponse, names = [];
+const MAX_POINTS = 175;
+const BOT_NAME_ROOT = "kbot";
+let teamRoster = [];
 
-module.exports.rosterBuilder = new Promise((resolve, reject) => {
-  generateNames();
-  generateStarters();
-  generateBench();
+module.exports.rosterBuilder = new Promise((resolve, reject) => {  
+  let botNamesArray = [];
+  generateNames(botNamesArray);
+  generatePlayers(botNamesArray);
   resolve(generateHTMLResponse());
 });
 
-function generateRoster() {
-  for (let i = 0; i < MAX_PLAYERS; i++) {
-    let playerObject = {};
-    playerObject.name = generateName();
-    roster.push(playerObject);
+function generateNames(botNamesArray) {
+  //generate bot name matching bot name pattern
+  const botName = BOT_NAME_ROOT + Math.floor(Math.random()*999);
+  //ensure that bot name has not already been used
+  if(botNamesArray.length <= MAX_PLAYERS && botNamesArray.indexOf(botName) == -1) {
+    //bot name good, add bot name to array
+    botNamesArray.push(botName);
+    //recursively call method until array is full
+    generateNames(botNamesArray);
+  } else if (botNamesArray.length <= MAX_PLAYERS) {
+    //bot name is bad, generate new name
+    generateNames(botNamesArray);
   }
 }
 
-function generateNames() {
-  const name = "kbot" + Math.floor(Math.random()*(999-100+1)+100);
-  if(names.length <= MAX_PLAYERS && names.indexOf(name) == -1) {
-    names.push(name);
-    generateNames();
-  } else if (names.length <= MAX_PLAYERS) {
-    generateNames();
-  }
+function generatePlayers(botNamesArray) {
+  let pointRemainder = MAX_POINTS;
+  botNamesArray.forEach((botName, index) => {
+    //adding 3 to max players to ensure lowest player has at least 3 total points
+    let totalPoints = (MAX_PLAYERS + 3) - index;
+    let isStarter = index <= MAX_STARTERS;
+    //add players to the roster
+    teamRoster.push(createPlayer(totalPoints, botName, isStarter));
+    pointRemainder -= totalPoints;
+  });
+  //every team needs a super star!
+  createSuperStarBot(pointRemainder);
 }
 
-function generateStarters() {
-  for (let i = 0; i < MAX_STARTERS; i++) {
-    let totalPoints = 19 - i;
-    roster.push(createPlayer(totalPoints, i));
-  }
+function createSuperStarBot(pointRemainder) {
+  //upgrade bot #1 to be our superstar.
+  teamRoster[0] = createPlayer(teamRoster[0].total + pointRemainder, teamRoster[0].name, true);
 }
 
-function generateBench() {
-  const numBench = MAX_PLAYERS - MAX_STARTERS;
-  for (let i = 0; i < numBench; i++) {
-    let totalPoints = 8 - i;
-    roster.push(createPlayer(totalPoints, i + 11));
-  }
-}
-
-function createPlayer(totalPoints, nameIndex) {
-  let playerObject = {}
+function createPlayer(totalPoints, playerName, isStarter) {
+  let playerObject = {};
+    //build well rounded players
     playerObject.speed = Math.floor(totalPoints/3);
     playerObject.strength = Math.floor(totalPoints/3);    
     playerObject.agility = Math.floor(totalPoints/3);
-    playerObject.agility += totalPoints - (playerObject.speed + playerObject.strength + playerObject.agility);
-    playerObject.total = playerObject.speed + playerObject.strength + playerObject.agility;
-    playerObject.name = names[nameIndex];
-    playerObject.starter = nameIndex < 11;
+    //agility is key, add remainder of points to make bots more agile.
+    playerObject.agility += totalPoints % 3;
+    playerObject.total = totalPoints;
+    playerObject.name = playerName;
+    playerObject.starter = isStarter;
   return playerObject;
 }
 
 function generateHTMLResponse() {
-  let totalTeamPoints = 0;
+  let totalTeamPoints = 0, htmlResponse;
   htmlResponse = '<p class="team-label">Team Kevin</p>';
   htmlResponse += '<table class="roster-table">';
   htmlResponse += '<tr><td>Player Name</td><td>Speed</td><td>Strength</td><td>Agility</td><td>Total</td><td>Starter</td></tr>';
-  roster.forEach( player => {
+  teamRoster.forEach( player => {
     htmlResponse += `
     <tr>
       <td>${player.name}</td>
@@ -77,4 +81,4 @@ function generateHTMLResponse() {
   htmlResponse += `<p class="team-label">Total Team Points: ${totalTeamPoints}`;
   return htmlResponse;
 }
-module.exports.roster = roster;
+module.exports.roster = teamRoster;

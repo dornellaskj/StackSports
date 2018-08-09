@@ -1,7 +1,6 @@
 import {rosterBuilder} from '../components/rosterBuilder/rosterBuilder';
 
 export default (req, res) => {
-  let html = 'hello';
   rosterBuilder.then( (rosterHTML) => {
     res.status(200).send(renderFullPage(rosterHTML));
   });
