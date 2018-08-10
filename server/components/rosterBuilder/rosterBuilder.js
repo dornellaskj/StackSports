@@ -11,15 +11,15 @@ module.exports.rosterBuilder = new Promise((resolve, reject) => {
 
 function generatePlayers() {
   let pointRemainder = MAX_POINTS;
-    for (let i = 0; i < MAX_PLAYERS; i++) {
-      const botName = BOT_NAME_ROOT + (999 - i);
-      //adding 3 to max players to ensure lowest player has at least 4 total points
-      const totalPoints = (MAX_PLAYERS + 3) - i;
-      const isStarter = i < MAX_STARTERS;
-      //add players to the roster
-      teamRoster.push(createPlayer(totalPoints, botName, isStarter));
-      pointRemainder -= totalPoints;
-    }
+  for (let i = 0; i < MAX_PLAYERS; i++) {
+    const botName = BOT_NAME_ROOT + (999 - i);
+    //adding 3 to max players to ensure lowest bot has at least 4 total points
+    const totalPoints = (MAX_PLAYERS + 3) - i;
+    const isStarter = i < MAX_STARTERS;
+    //add players to the roster
+    teamRoster.push(createPlayer(totalPoints, botName, isStarter));
+    pointRemainder -= totalPoints;
+  }
   //every team needs a super star!
   createSuperStarBot(pointRemainder);
 }
@@ -35,7 +35,7 @@ function createPlayer(totalPoints, playerName, isStarter) {
     playerObject.speed = Math.floor(totalPoints/3);
     playerObject.strength = Math.floor(totalPoints/3);    
     playerObject.agility = Math.floor(totalPoints/3);
-    //agility is key, add remainder of points to make bots more agile.
+    //add remainder of points to make bots more agile.
     playerObject.agility += totalPoints % 3;
     playerObject.total = totalPoints;
     playerObject.name = playerName;
