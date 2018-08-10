@@ -5,37 +5,21 @@ const BOT_NAME_ROOT = "kbot";
 let teamRoster = [];
 
 module.exports.rosterBuilder = new Promise((resolve, reject) => {  
-  let botNamesArray = [];
-  generateNames(botNamesArray);
-  generatePlayers(botNamesArray);
+  generatePlayers();
   resolve(generateHTMLResponse());
 });
 
-function generateNames(botNamesArray) {
-  //generate bot name matching bot name pattern
-  const botName = BOT_NAME_ROOT + Math.floor(Math.random()*999);
-  //ensure that bot name has not already been used
-  if(botNamesArray.length <= MAX_PLAYERS && botNamesArray.indexOf(botName) == -1) {
-    //bot name good, add bot name to array
-    botNamesArray.push(botName);
-    //recursively call method until array is full
-    generateNames(botNamesArray);
-  } else if (botNamesArray.length <= MAX_PLAYERS) {
-    //bot name is bad, generate new name
-    generateNames(botNamesArray);
-  }
-}
-
-function generatePlayers(botNamesArray) {
+function generatePlayers() {
   let pointRemainder = MAX_POINTS;
-  botNamesArray.forEach((botName, index) => {
-    //adding 3 to max players to ensure lowest player has at least 3 total points
-    let totalPoints = (MAX_PLAYERS + 3) - index;
-    let isStarter = index <= MAX_STARTERS;
-    //add players to the roster
-    teamRoster.push(createPlayer(totalPoints, botName, isStarter));
-    pointRemainder -= totalPoints;
-  });
+    for (let i = 0; i < MAX_PLAYERS; i++) {
+      const botName = BOT_NAME_ROOT + (999 - i);
+      //adding 3 to max players to ensure lowest player has at least 4 total points
+      const totalPoints = (MAX_PLAYERS + 3) - i;
+      const isStarter = i < MAX_STARTERS;
+      //add players to the roster
+      teamRoster.push(createPlayer(totalPoints, botName, isStarter));
+      pointRemainder -= totalPoints;
+    }
   //every team needs a super star!
   createSuperStarBot(pointRemainder);
 }
